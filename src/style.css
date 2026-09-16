@@ -1,0 +1,157 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172126;
+  background: #dce6e8;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+button { font: inherit; }
+
+.scene {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(23, 33, 38, 0.12);
+  background: rgba(244, 248, 247, 0.86);
+  backdrop-filter: blur(12px);
+}
+
+.topbar div { display: grid; gap: 2px; }
+.topbar strong { font-size: 20px; }
+
+.eyebrow {
+  color: #5d7479;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.lesson-number {
+  color: #16697a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lesson-panel {
+  position: fixed;
+  z-index: 2;
+  top: 104px;
+  left: 28px;
+  width: min(350px, calc(100vw - 56px));
+  padding: 24px;
+  border: 1px solid rgba(23, 33, 38, 0.14);
+  border-radius: 8px;
+  background: rgba(248, 251, 250, 0.94);
+  box-shadow: 0 20px 50px rgba(35, 55, 59, 0.14);
+  backdrop-filter: blur(12px);
+}
+
+h1 {
+  margin: 8px 0 10px;
+  font-size: 28px;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+p {
+  margin: 0;
+  color: #53666a;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.concept-list {
+  display: grid;
+  gap: 0;
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #dce4e3;
+}
+
+.concept-list li {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid #dce4e3;
+}
+
+.concept-list b { color: #16697a; font-size: 13px; }
+.concept-list span { color: #607276; font-size: 12px; line-height: 1.4; }
+
+.pause-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid #16697a;
+  border-radius: 6px;
+  background: #16697a;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pause-button:hover { background: #115765; }
+.pause-button:focus-visible { outline: 3px solid rgba(22, 105, 122, 0.28); outline-offset: 3px; }
+.pause-button span { width: 14px; text-align: center; }
+
+.hint {
+  position: fixed;
+  right: 24px;
+  bottom: 20px;
+  z-index: 2;
+  padding: 9px 12px;
+  border: 1px solid rgba(23, 33, 38, 0.12);
+  border-radius: 6px;
+  background: rgba(248, 251, 250, 0.86);
+  color: #53666a;
+  font-size: 12px;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 700px) {
+  .topbar { height: 62px; padding: 0 18px; }
+  .topbar strong { font-size: 17px; }
+  .lesson-panel {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 46vh;
+    padding: 18px;
+    overflow-y: auto;
+  }
+  h1 { font-size: 23px; }
+  .concept-list { margin: 14px 0; }
+  .concept-list li { padding: 8px 0; }
+  .hint { display: none; }
+}
