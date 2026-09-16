@@ -12,55 +12,50 @@ app.innerHTML = `
       <span class="eyebrow">THREE.JS LEARNING</span>
       <strong>City Lab</strong>
     </div>
-      <span class="lesson-number">Lesson 02</span>
+      <span class="lesson-number">Lesson 03</span>
   </header>
 
   <aside class="lesson-panel">
-    <span class="eyebrow">TRANSFORMS</span>
-    <h1>Move, rotate and scale</h1>
-    <p>Every Object3D has position, rotation and scale. Change them independently and watch the axes.</p>
+    <span class="eyebrow">SURFACES</span>
+    <h1>Geometry meets material</h1>
+    <p>A geometry defines the shape. A material defines how its surface reacts to light.</p>
 
     <ol class="concept-list">
-      <li><b>X axis</b><span class="axis x-axis">Red · left and right</span></li>
-      <li><b>Y axis</b><span class="axis y-axis">Green · up and down</span></li>
-      <li><b>Z axis</b><span class="axis z-axis">Blue · forward and back</span></li>
+      <li><b>Geometry</b><span>Vertices and faces form the shape.</span></li>
+      <li><b>Material</b><span>Color and surface properties.</span></li>
+      <li><b>Mesh</b><span>Geometry and material combined.</span></li>
     </ol>
 
-    <div class="transform-controls">
+    <div class="material-picker" role="group" aria-label="Material type">
+      <button type="button" data-material="basic">Basic</button>
+      <button type="button" data-material="standard" class="active">Standard</button>
+      <button type="button" data-material="physical">Physical</button>
+    </div>
+
+    <div class="surface-controls">
       <label>
-        <span>Position X <output data-output="position">0.0</output></span>
-        <input data-control="position" type="range" min="-3" max="3" step="0.1" value="0">
+        <span>Roughness <output data-output="roughness">0.35</output></span>
+        <input data-control="roughness" type="range" min="0" max="1" step="0.05" value="0.35">
       </label>
       <label>
-        <span>Rotation Y <output data-output="rotation">0°</output></span>
-        <input data-control="rotation" type="range" min="-180" max="180" step="1" value="0">
-      </label>
-      <label>
-        <span>Position Z <output data-output="leveling">0.0°</output></span>
-        <input data-control="leveling" type="range" min="-3" max="3" step="0.1" value="0">
-      </label>
-      <label>
-        <span>Scale <output data-output="scale">1.0×</output></span>
-        <input data-control="scale" type="range" min="0.4" max="1.8" step="0.1" value="1">
+        <span>Metalness <output data-output="metalness">0.10</output></span>
+        <input data-control="metalness" type="range" min="0" max="1" step="0.05" value="0.1">
       </label>
     </div>
 
-    <button class="reset-button" type="button">Reset transforms</button>
+    <p class="material-note" role="status">Standard reacts to light using roughness and metalness.</p>
   </aside>
 
   <div class="hint">Drag to orbit · Scroll to zoom</div>
 `
 
 const canvas = document.querySelector('.scene')
-const positionControl = document.querySelector('[data-control="position"]')
-const rotationControl = document.querySelector('[data-control="rotation"]')
-const levelingControl = document.querySelector('[data-control="leveling"]')
-const scaleControl = document.querySelector('[data-control="scale"]')
-const positionOutput = document.querySelector('[data-output="position"]')
-const rotationOutput = document.querySelector('[data-output="rotation"]')
-const levelingOutput = document.querySelector('[data-output="leveling"]')
-const scaleOutput = document.querySelector('[data-output="scale"]')
-const resetButton = document.querySelector('.reset-button')
+const materialButtons = [...document.querySelectorAll('[data-material]')]
+const roughnessControl = document.querySelector('[data-control="roughness"]')
+const metalnessControl = document.querySelector('[data-control="metalness"]')
+const roughnessOutput = document.querySelector('[data-output="roughness"]')
+const metalnessOutput = document.querySelector('[data-output="metalness"]')
+const materialNote = document.querySelector('.material-note')
 
 // 1. The scene is the world that holds all objects, lights and cameras.
 const scene = new THREE.Scene()
@@ -81,24 +76,52 @@ renderer.outputColorSpace = THREE.SRGBColorSpace
 
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.target.set(0, 0.8, 0)
-controls.minDistance = 4
-controls.maxDistance = 12
+controls.target.set(0, 1, 0)
+controls.minDistance = 5
+controls.maxDistance = 14
 controls.maxPolarAngle = Math.PI / 2.05
 
-const cube = new THREE.Mesh(
-  new THREE.BoxGeometry(2.6, 1.0, 3.6),
-  new THREE.MeshStandardMaterial({ color: '#2ea73e', roughness: 0.35, metalness: 0.05 })
-)
-cube.position.y = 1.05
-cube.castShadow = true
-scene.add(cube)
+const geometries = [
+  new THREE.BoxGeometry(1.7, 1.7, 1.7),
+  new THREE.SphereGeometry(1.05, 48, 32),
+  new THREE.CylinderGeometry(0.9, 0.9, 2, 48),
+  new THREE.ConeGeometry( 1.2, 2.2, 48)
+]
 
-const edgeLines = new THREE.LineSegments(
-  new THREE.EdgesGeometry(cube.geometry),
-  new THREE.LineBasicMaterial({ color: '#f7fbfc' })
+let activeMaterialType = 'standard'
+
+function createMaterial(type) {
+  const shared = { color: '#167d8d' }
+
+  if (type === 'basic') return new THREE.MeshBasicMaterial(shared)
+  if (type === 'physical') {
+    return new THREE.MeshPhysicalMaterial({
+      ...shared,
+      roughness: Number(roughnessControl.value),
+      metalness: Number(metalnessControl.value),
+      clearcoat: 1,
+      clearcoatRoughness: 0.12
+    })
+  }
+
+  return new THREE.MeshStandardMaterial({
+    ...shared,
+    roughness: Number(roughnessControl.value),
+    metalness: Number(metalnessControl.value)
+  })
+}
+
+const objects = geometries.map((geometry, index) => {
+  const mesh = new THREE.Mesh(geometry, createMaterial(activeMaterialType))
+  mesh.position.set(
+  (index - (geometries.length - 1) / 2) * 2.8,
+  index === 1 ? 1.1 : 1,
+  0
 )
-cube.add(edgeLines)
+  mesh.castShadow = true
+  scene.add(mesh)
+  return mesh
+})
 
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(30, 30),
@@ -112,11 +135,6 @@ const grid = new THREE.GridHelper(30, 30, '#9bb1b4', '#c5d3d3')
 grid.position.y = 0.002
 scene.add(grid)
 
-// AxesHelper uses the standard colors: X red, Y green and Z blue.
-const axes = new THREE.AxesHelper(3.5)
-axes.position.y = 0.01
-scene.add(axes)
-
 const keyLight = new THREE.DirectionalLight('#fff6df', 3.2)
 keyLight.position.set(4, 7, 5)
 keyLight.castShadow = true
@@ -126,39 +144,52 @@ scene.add(keyLight)
 const fillLight = new THREE.HemisphereLight('#c8e6ff', '#46564c', 1.8)
 scene.add(fillLight)
 
-function updateTransforms() {
-  const positionX = Number(positionControl.value)
-  const rotationDegrees = Number(rotationControl.value)
-  const uniformScale = Number(scaleControl.value)
-  const positionZ = Number(levelingControl.value)
+function updateSurface() {
+  const roughness = Number(roughnessControl.value)
+  const metalness = Number(metalnessControl.value)
 
-  cube.position.x = positionX
-  cube.position.z = positionZ
-  cube.rotation.y = THREE.MathUtils.degToRad(rotationDegrees)
-  cube.scale.setScalar(uniformScale)
+  roughnessOutput.value = roughness.toFixed(2)
+  metalnessOutput.value = metalness.toFixed(2)
 
-  positionOutput.value = positionX.toFixed(1)
-  rotationOutput.value = `${rotationDegrees}°`
-  levelingOutput.value = positionZ.toFixed(1)
-  scaleOutput.value = `${uniformScale.toFixed(1)}×`
+  objects.forEach((object) => {
+    if ('roughness' in object.material) object.material.roughness = roughness
+    if ('metalness' in object.material) object.material.metalness = metalness
+  })
 }
 
-;[positionControl, rotationControl, levelingControl, scaleControl].forEach((control) => {
-  control.addEventListener('input', updateTransforms)
+;[roughnessControl, metalnessControl].forEach((control) => {
+  control.addEventListener('input', updateSurface)
 })
 
-resetButton.addEventListener('click', () => {
-  positionControl.value = 0
-  rotationControl.value = 0
-  levelingControl.value = 0
-  scaleControl.value = 1
-  updateTransforms()
+materialButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    activeMaterialType = button.dataset.material
+
+    materialButtons.forEach((item) => item.classList.toggle('active', item === button))
+    objects.forEach((object) => {
+      object.material.dispose()
+      object.material = createMaterial(activeMaterialType)
+    })
+
+    const usesLight = activeMaterialType !== 'basic'
+    roughnessControl.disabled = !usesLight
+    metalnessControl.disabled = !usesLight
+    materialNote.textContent = activeMaterialType === 'basic'
+      ? 'Basic ignores all lights, so surface controls do not apply.'
+      : activeMaterialType === 'physical'
+        ? 'Physical adds a clear coated layer over the standard surface.'
+        : 'Standard reacts to light using roughness and metalness.'
+  })
 })
 
-updateTransforms()
+updateSurface()
 
 // 4. The loop updates the world and renders the next frame.
 function animate() {
+  const time = performance.now() * 0.00035
+  objects.forEach((object, index) => {
+    object.rotation.y = time + index * 0.35
+  })
   controls.update()
   renderer.render(scene, camera)
   requestAnimationFrame(animate)

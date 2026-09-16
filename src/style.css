@@ -105,65 +105,68 @@ p {
 .concept-list b { color: #16697a; font-size: 13px; }
 .concept-list span { color: #607276; font-size: 12px; line-height: 1.4; }
 
-.reset-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 42px;
-  padding: 0 15px;
-  border: 1px solid #16697a;
-  border-radius: 6px;
-  background: #16697a;
-  color: #ffffff;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.reset-button:hover { background: #115765; }
-.reset-button:focus-visible { outline: 3px solid rgba(22, 105, 122, 0.28); outline-offset: 3px; }
-
-.axis::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 7px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.x-axis { color: #d63c32 !important; }
-.y-axis { color: #269b50 !important; }
-.z-axis { color: #2b6de0 !important; }
-
-.transform-controls {
+.surface-controls {
   display: grid;
   gap: 14px;
   margin: 18px 0;
 }
 
-.transform-controls label,
-.transform-controls label > span {
+.surface-controls label,
+.surface-controls label > span {
   display: grid;
   gap: 7px;
 }
 
-.transform-controls label > span {
+.surface-controls label > span {
   grid-template-columns: 1fr auto;
   color: #33494e;
   font-size: 12px;
   font-weight: 700;
 }
 
-.transform-controls output {
+.surface-controls output {
   color: #16697a;
   font-variant-numeric: tabular-nums;
 }
 
-.transform-controls input {
+.surface-controls input {
   width: 100%;
   accent-color: #16697a;
   cursor: pointer;
+}
+
+.surface-controls input:disabled { cursor: not-allowed; opacity: 0.38; }
+
+.material-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.material-picker button {
+  min-width: 0;
+  height: 38px;
+  padding: 0 7px;
+  border: 1px solid #c9d5d4;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4c6266;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.material-picker button:hover { border-color: #16697a; }
+.material-picker button.active { border-color: #16697a; background: #16697a; color: #ffffff; }
+.material-picker button:focus-visible { outline: 3px solid rgba(22, 105, 122, 0.22); outline-offset: 2px; }
+
+.material-note {
+  min-height: 38px;
+  padding: 10px 11px;
+  border-left: 3px solid #16697a;
+  background: #edf5f4;
+  font-size: 12px;
 }
 
 .hint {
@@ -196,6 +199,6 @@ p {
   h1 { font-size: 23px; }
   .concept-list { margin: 14px 0; }
   .concept-list li { padding: 8px 0; }
-  .transform-controls { margin: 14px 0; }
+  .surface-controls { margin: 14px 0; }
   .hint { display: none; }
 }

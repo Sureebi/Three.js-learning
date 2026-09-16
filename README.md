@@ -23,6 +23,15 @@ The second lesson adds interactive controls for the three transformations availa
 
 The lesson includes controls for X and Z movement, Y rotation, uniform scaling and resetting all transforms.
 
+## Lesson 03: Geometry and materials
+
+The third lesson compares several geometries and material models:
+
+- `BufferGeometry` stores the vertices and faces of a shape.
+- `Material` controls color and how a surface reacts to light.
+- `Mesh` combines one geometry with one material.
+- Roughness and metalness change the response of physically based materials.
+
 ## Run locally
 
 ```bash
