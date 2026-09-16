@@ -34,6 +34,15 @@ The third lesson compares several geometries and material models:
 - `Mesh` combines one geometry with one material.
 - Roughness and metalness change the response of physically based materials.
 
+## Lesson 04: Lights and shadows
+
+The fourth lesson builds a small lighting studio:
+
+- `AmbientLight` illuminates all surfaces equally and creates no shadows.
+- `DirectionalLight` uses parallel rays, similar to sunlight.
+- `PointLight` radiates from a position in every direction.
+- Shadow maps add depth but require additional GPU work.
+
 ## Run locally
 
 ```bash

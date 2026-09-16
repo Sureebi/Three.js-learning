@@ -137,6 +137,25 @@ p {
 
 .surface-controls input:disabled { cursor: not-allowed; opacity: 0.38; }
 
+.shadow-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 4px 0 16px;
+  color: #33494e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.shadow-toggle input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #16697a;
+}
+
+.shadow-toggle:has(input:disabled) { opacity: 0.42; }
+
 .material-picker {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
