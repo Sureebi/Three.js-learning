@@ -19,3 +19,11 @@ npm run dev
 ```
 
 Open the local URL printed by Vite, then drag to orbit and scroll to zoom.
+
+## Lesson 02: Transformations
+
+The second lesson adds interactive controls for the three transformations available on every `Object3D`:
+
+- `position` moves an object along the X, Y and Z axes.
+- `rotation` turns an object using radians.
+- `scale` changes its size along each axis.

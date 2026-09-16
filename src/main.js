@@ -12,32 +12,55 @@ app.innerHTML = `
       <span class="eyebrow">THREE.JS LEARNING</span>
       <strong>City Lab</strong>
     </div>
-    <span class="lesson-number">Lesson 01</span>
+      <span class="lesson-number">Lesson 02</span>
   </header>
 
   <aside class="lesson-panel">
-    <span class="eyebrow">THE FIRST SCENE</span>
-    <h1>Meet the four essentials</h1>
-    <p>Every Three.js experience starts with a scene, camera, renderer and an animation loop.</p>
+    <span class="eyebrow">TRANSFORMS</span>
+    <h1>Move, rotate and scale</h1>
+    <p>Every Object3D has position, rotation and scale. Change them independently and watch the axes.</p>
 
     <ol class="concept-list">
-      <li><b>Scene</b><span>The container for every 3D object.</span></li>
-      <li><b>Camera</b><span>Your viewpoint into the scene.</span></li>
-      <li><b>Renderer</b><span>Draws the scene onto the canvas.</span></li>
-      <li><b>Loop</b><span>Updates and redraws each frame.</span></li>
+      <li><b>X axis</b><span class="axis x-axis">Red · left and right</span></li>
+      <li><b>Y axis</b><span class="axis y-axis">Green · up and down</span></li>
+      <li><b>Z axis</b><span class="axis z-axis">Blue · forward and back</span></li>
     </ol>
 
-    <button class="pause-button" type="button" aria-pressed="false">
-      <span aria-hidden="true">Ⅱ</span>
-      Pause rotation
-    </button>
+    <div class="transform-controls">
+      <label>
+        <span>Position X <output data-output="position">0.0</output></span>
+        <input data-control="position" type="range" min="-3" max="3" step="0.1" value="0">
+      </label>
+      <label>
+        <span>Rotation Y <output data-output="rotation">0°</output></span>
+        <input data-control="rotation" type="range" min="-180" max="180" step="1" value="0">
+      </label>
+      <label>
+        <span>Position Z <output data-output="leveling">0.0°</output></span>
+        <input data-control="leveling" type="range" min="-3" max="3" step="0.1" value="0">
+      </label>
+      <label>
+        <span>Scale <output data-output="scale">1.0×</output></span>
+        <input data-control="scale" type="range" min="0.4" max="1.8" step="0.1" value="1">
+      </label>
+    </div>
+
+    <button class="reset-button" type="button">Reset transforms</button>
   </aside>
 
   <div class="hint">Drag to orbit · Scroll to zoom</div>
 `
 
 const canvas = document.querySelector('.scene')
-const pauseButton = document.querySelector('.pause-button')
+const positionControl = document.querySelector('[data-control="position"]')
+const rotationControl = document.querySelector('[data-control="rotation"]')
+const levelingControl = document.querySelector('[data-control="leveling"]')
+const scaleControl = document.querySelector('[data-control="scale"]')
+const positionOutput = document.querySelector('[data-output="position"]')
+const rotationOutput = document.querySelector('[data-output="rotation"]')
+const levelingOutput = document.querySelector('[data-output="leveling"]')
+const scaleOutput = document.querySelector('[data-output="scale"]')
+const resetButton = document.querySelector('.reset-button')
 
 // 1. The scene is the world that holds all objects, lights and cameras.
 const scene = new THREE.Scene()
@@ -68,7 +91,6 @@ const cube = new THREE.Mesh(
   new THREE.MeshStandardMaterial({ color: '#2ea73e', roughness: 0.35, metalness: 0.05 })
 )
 cube.position.y = 1.05
-cube.rotation.x = 0.15
 cube.castShadow = true
 scene.add(cube)
 
@@ -90,6 +112,11 @@ const grid = new THREE.GridHelper(30, 30, '#9bb1b4', '#c5d3d3')
 grid.position.y = 0.002
 scene.add(grid)
 
+// AxesHelper uses the standard colors: X red, Y green and Z blue.
+const axes = new THREE.AxesHelper(3.5)
+axes.position.y = 0.01
+scene.add(axes)
+
 const keyLight = new THREE.DirectionalLight('#fff6df', 3.2)
 keyLight.position.set(4, 7, 5)
 keyLight.castShadow = true
@@ -99,26 +126,39 @@ scene.add(keyLight)
 const fillLight = new THREE.HemisphereLight('#c8e6ff', '#46564c', 1.8)
 scene.add(fillLight)
 
-let isPaused = false
+function updateTransforms() {
+  const positionX = Number(positionControl.value)
+  const rotationDegrees = Number(rotationControl.value)
+  const uniformScale = Number(scaleControl.value)
+  const positionZ = Number(levelingControl.value)
 
-pauseButton.addEventListener('click', () => {
-  isPaused = !isPaused
-  pauseButton.setAttribute('aria-pressed', String(isPaused))
-  pauseButton.innerHTML = isPaused
-    ? '<span aria-hidden="true">▶</span> Resume rotation'
-    : '<span aria-hidden="true">Ⅱ</span> Pause rotation'
+  cube.position.x = positionX
+  cube.position.z = positionZ
+  cube.rotation.y = THREE.MathUtils.degToRad(rotationDegrees)
+  cube.scale.setScalar(uniformScale)
+
+  positionOutput.value = positionX.toFixed(1)
+  rotationOutput.value = `${rotationDegrees}°`
+  levelingOutput.value = positionZ.toFixed(1)
+  scaleOutput.value = `${uniformScale.toFixed(1)}×`
+}
+
+;[positionControl, rotationControl, levelingControl, scaleControl].forEach((control) => {
+  control.addEventListener('input', updateTransforms)
 })
 
-const clock = new THREE.Clock()
+resetButton.addEventListener('click', () => {
+  positionControl.value = 0
+  rotationControl.value = 0
+  levelingControl.value = 0
+  scaleControl.value = 1
+  updateTransforms()
+})
+
+updateTransforms()
 
 // 4. The loop updates the world and renders the next frame.
 function animate() {
-  const delta = clock.getDelta()
-
-  if (!isPaused) {
-    cube.rotation.y += delta * 0.45
-  }
-
   controls.update()
   renderer.render(scene, camera)
   requestAnimationFrame(animate)
