@@ -25,6 +25,8 @@ The lesson includes controls for X and Z movement, Y rotation, uniform scaling a
 
 ## Lesson 03: Geometry and materials
 
+![Three.js City Lab preview](docs/lesson3.png)
+
 The third lesson compares several geometries and material models:
 
 - `BufferGeometry` stores the vertices and faces of a shape.
