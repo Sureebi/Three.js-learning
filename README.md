@@ -36,6 +36,8 @@ The third lesson compares several geometries and material models:
 
 ## Lesson 04: Lights and shadows
 
+![Three.js City Lab preview](docs/lesson4.png)
+
 The fourth lesson builds a small lighting studio:
 
 - `AmbientLight` illuminates all surfaces equally and creates no shadows.
