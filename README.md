@@ -56,6 +56,12 @@ The fifth lesson maps generated image patterns onto a cube and sphere:
 - `RepeatWrapping` tiles a texture beyond the default UV range.
 - Texture anisotropy improves sharpness when a surface is viewed at an angle.
 
+
+## Part 2 Soon
+
+This repository contains only the bare basics for working with Three.JS
+
+
 ## Run locally
 
 ```bash
