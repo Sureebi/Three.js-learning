@@ -43,7 +43,7 @@ app.innerHTML = `
         <input data-control="repeat-y" type="range" min="1" max="8" step="1" value="2">
       </label>
       <label>
-        <span>Offset X <output data-output="offset-x">2</output></span>
+        <span>Offset X <output data-output="offset-x">0.00</output></span>
         <input data-control="offset-x" type="range" min="0" max="1" step="0.05" value="0">
       </label>
     </div>
