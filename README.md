@@ -47,7 +47,7 @@ The fourth lesson builds a small lighting studio:
 
 ## Lesson 05: Textures and UV coordinates
 
-![Three.js City Lab preview](docs/lesson4.png)
+![Three.js City Lab preview](docs/lesson5.png)
 
 The fifth lesson maps generated image patterns onto a cube and sphere:
 
