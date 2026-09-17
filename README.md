@@ -45,6 +45,17 @@ The fourth lesson builds a small lighting studio:
 - `PointLight` radiates from a position in every direction.
 - Shadow maps add depth but require additional GPU work.
 
+## Lesson 05: Textures and UV coordinates
+
+![Three.js City Lab preview](docs/lesson4.png)
+
+The fifth lesson maps generated image patterns onto a cube and sphere:
+
+- `CanvasTexture` turns a canvas into a texture without an external image file.
+- UV coordinates connect pixels from a flat image to a 3D surface.
+- `RepeatWrapping` tiles a texture beyond the default UV range.
+- Texture anisotropy improves sharpness when a surface is viewed at an angle.
+
 ## Run locally
 
 ```bash
